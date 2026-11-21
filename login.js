@@ -21,26 +21,10 @@ const authElements = {
 };
 
 const MODE_COPY = {
-  signin: {
-    title: "Welcome back",
-    description: "Sign in to continue to your Marketfield workspace.",
-    submit: "Sign in"
-  },
-  signup: {
-    title: "Create your account",
-    description: "Start building your personal market watchlist.",
-    submit: "Create account"
-  },
-  reset: {
-    title: "Reset your password",
-    description: "We’ll email you a secure link to choose a new password.",
-    submit: "Send reset link"
-  },
-  recovery: {
-    title: "Choose a new password",
-    description: "Set a new password for your Marketfield account.",
-    submit: "Update password"
-  }
+  signin: { title: "Welcome back", description: "Sign in to continue to your Marketfield workspace.", submit: "Sign in" },
+  signup: { title: "Create your account", description: "Start building your personal market watchlist.", submit: "Create account" },
+  reset: { title: "Reset your password", description: "We’ll email you a secure link to choose a new password.", submit: "Send reset link" },
+  recovery: { title: "Choose a new password", description: "Set a new password for your Marketfield account.", submit: "Update password" }
 };
 
 let authClient = null;
@@ -77,10 +61,9 @@ function setMode(nextMode) {
   authElements.passwordField.hidden = !needsPassword;
   authElements.password.required = needsPassword;
   authElements.password.autocomplete = isSignIn ? "current-password" : "new-password";
-  authElements.password.placeholder = isReset ? "" : mode === "recovery" ? "Choose a new password" : "Enter your password";
-  authElements.passwordLabel.textContent = mode === "recovery" ? "New password" : "Password";
   authElements.confirmField.hidden = !needsConfirm;
   authElements.confirmPassword.required = needsConfirm;
+  authElements.passwordLabel.textContent = mode === "recovery" ? "New password" : "Password";
   authElements.forgotPassword.hidden = !isSignIn;
   authElements.backToSignIn.hidden = isSignIn || isSignUp;
   authElements.message.hidden = true;
@@ -98,12 +81,7 @@ function setPending(isPending) {
 
 async function initializeLogin() {
   authClient = await window.marketfieldAuth.getClient();
-  if (!authClient) {
-    authElements.tabs.hidden = true;
-    authElements.form.hidden = true;
-    showMessage("Supabase isn’t configured. Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY in the server environment, then restart Marketfield.", true);
-    return;
-  }
+  if (!authClient) throw new Error("Supabase is not configured.");
 
   const search = new URLSearchParams(window.location.search);
   const hash = new URLSearchParams(window.location.hash.slice(1));
@@ -120,7 +98,6 @@ async function initializeLogin() {
     setMode("recovery");
     return;
   }
-
   if (data.session) window.location.replace("./");
 }
 
@@ -136,7 +113,7 @@ authElements.form.addEventListener("submit", async event => {
   const email = authElements.email.value.trim();
   const password = authElements.password.value;
   if ((mode === "signup" || mode === "recovery") && password !== authElements.confirmPassword.value) {
-    showMessage("The passwords don’t match.", true);
+    showMessage("The passwords do not match.", true);
     authElements.confirmPassword.focus();
     return;
   }
@@ -149,7 +126,6 @@ authElements.form.addEventListener("submit", async event => {
       window.location.replace("./");
       return;
     }
-
     if (mode === "signup") {
       const { data, error } = await authClient.auth.signUp({
         email,
@@ -157,15 +133,13 @@ authElements.form.addEventListener("submit", async event => {
         options: { emailRedirectTo: new URL("./login.html", window.location.href).href }
       });
       if (error) throw error;
-      if (data.session) {
-        window.location.replace("./");
-        return;
+      if (data.session) window.location.replace("./");
+      else {
+        setMode("signin");
+        showMessage("Account created. Check your email to confirm your address before signing in.");
       }
-      setMode("signin");
-      showMessage("Account created. Check your email to confirm your address before signing in.");
       return;
     }
-
     if (mode === "reset") {
       const { error } = await authClient.auth.resetPasswordForEmail(email, {
         redirectTo: new URL("./login.html?mode=recovery", window.location.href).href
@@ -174,7 +148,6 @@ authElements.form.addEventListener("submit", async event => {
       showMessage("If an account exists for that email, a password reset link is on its way.");
       return;
     }
-
     const { error } = await authClient.auth.updateUser({ password });
     if (error) throw error;
     window.location.replace("./");
@@ -194,5 +167,5 @@ authElements.form.addEventListener("submit", async event => {
 initializeLogin().catch(() => {
   authElements.tabs.hidden = true;
   authElements.form.hidden = true;
-  showMessage("Could not connect to Supabase. Check the server configuration and network, then reload.", true);
+  showMessage("Could not connect to Supabase. Check the project configuration and reload.", true);
 });

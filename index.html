@@ -11,8 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;450;500;550;600;650;700;750&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="auth.js?v=20261122" defer></script>
-    <script src="app.js?v=20261122-public" defer></script>
+    <script src="supabase-config.js?v=20261122" defer></script>
+    <script src="auth.js?v=20261122-supabase" defer></script>
+    <script src="app.js?v=20261122-supabase" defer></script>
   </head>
   <body>
     <div class="auth-loading" id="auth-loading" role="status">Checking your Marketfield session…</div>
@@ -28,7 +29,7 @@
             <span class="command-trigger-icon" aria-hidden="true">⌕</span><span class="command-trigger-label">Search stocks</span><kbd id="command-shortcut">Ctrl K</kbd>
           </button>
           <span class="market-hours" title="Estimated U.S. session based on weekday hours; exchange holidays are not included."><span class="hours-dot"></span> <span id="market-status">Checking U.S. session</span></span>
-          <button class="avatar" id="signout-button" type="button" aria-label="Sign out" title="Sign out">↪</button>
+          <button class="avatar" id="signout-button" type="button" aria-label="Sign in" title="Sign in">Sign in</button>
         </div>
       </header>
 
