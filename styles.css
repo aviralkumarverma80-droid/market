@@ -526,6 +526,38 @@ body {
   transform-style: preserve-3d;
 }
 
+.ambient-orb::before,
+.ambient-orb::after {
+  position: absolute;
+  inset: 14% -24%;
+  border: 1px solid rgba(103, 194, 255, .36);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(67, 151, 255, .12);
+  content: "";
+}
+
+.ambient-orb::before {
+  transform: rotateX(68deg) rotateZ(-24deg);
+  animation: ambient-ring-turn 28s linear infinite;
+}
+
+.ambient-orb::after {
+  inset: -18% 8%;
+  border-color: rgba(209, 98, 255, .23);
+  transform: rotateY(68deg) rotateZ(18deg);
+  animation: ambient-ring-turn 38s linear infinite reverse;
+}
+
+.ambient-orb--secondary {
+  top: auto;
+  right: auto;
+  bottom: -16%;
+  left: 30%;
+  width: clamp(150px, 22vw, 290px);
+  opacity: .46;
+  animation-duration: 27s;
+}
+
 .ambient-cube {
   position: absolute;
   bottom: 13%;
@@ -552,6 +584,56 @@ body {
 .ambient-cube span:nth-child(4) { transform: rotateY(-90deg) translateZ(58px); }
 .ambient-cube span:nth-child(5) { transform: rotateX(90deg) translateZ(58px); }
 .ambient-cube span:nth-child(6) { transform: rotateX(-90deg) translateZ(58px); }
+
+.ambient-bars {
+  position: absolute;
+  right: 12%;
+  bottom: 11%;
+  display: flex;
+  width: clamp(140px, 22vw, 260px);
+  height: 170px;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 12px;
+  opacity: .42;
+  transform: perspective(520px) rotateX(48deg) rotateZ(-16deg);
+  transform-style: preserve-3d;
+}
+
+.ambient-bars span {
+  position: relative;
+  width: 9%;
+  height: var(--bar-height);
+  border: 1px solid rgba(105, 217, 255, .52);
+  border-bottom: 0;
+  background: linear-gradient(180deg, rgba(89, 217, 255, .45), rgba(71, 107, 255, .08));
+  box-shadow: 0 0 15px rgba(56, 160, 255, .16), inset 0 0 12px rgba(85, 204, 255, .12);
+  transform: skewY(-8deg);
+  transform-origin: bottom;
+  animation: ambient-bar-pulse 3.8s ease-in-out infinite alternate;
+}
+
+.ambient-bars span::before {
+  position: absolute;
+  top: -9px;
+  left: -1px;
+  width: 100%;
+  height: 9px;
+  background: rgba(119, 227, 255, .5);
+  content: "";
+  transform: skewX(-45deg);
+  transform-origin: bottom;
+}
+
+.ambient-bars span:nth-child(1) { --bar-height: 34%; animation-delay: -1.6s; }
+.ambient-bars span:nth-child(2) { --bar-height: 56%; animation-delay: -.8s; }
+.ambient-bars span:nth-child(3) { --bar-height: 43%; animation-delay: -2.2s; }
+.ambient-bars span:nth-child(4) { --bar-height: 76%; animation-delay: -.4s; }
+.ambient-bars span:nth-child(5) { --bar-height: 61%; animation-delay: -1.9s; }
+.ambient-bars span:nth-child(6) { --bar-height: 92%; animation-delay: -.9s; }
+.ambient-bars span:nth-child(7) { --bar-height: 69%; animation-delay: -2.6s; }
+.ambient-bars span:nth-child(4)::before,
+.ambient-bars span:nth-child(7)::before { background: rgba(255, 118, 212, .48); }
 
 .ambient-chart {
   position: absolute;
@@ -615,6 +697,10 @@ body {
   to { transform: translate3d(-5vw, 4vh, 30px) rotateY(12deg) scale(1.04); }
 }
 
+@keyframes ambient-ring-turn {
+  to { rotate: 360deg; }
+}
+
 @keyframes ambient-cube-turn {
   from { transform: translateY(0) rotateX(-18deg) rotateY(0) rotateZ(-12deg); }
   to { transform: translateY(-24px) rotateX(342deg) rotateY(360deg) rotateZ(348deg); }
@@ -633,6 +719,10 @@ body {
   50% { opacity: .58; stroke-width: 5; }
 }
 
+@keyframes ambient-bar-pulse {
+  to { filter: brightness(1.45); transform: skewY(-8deg) scaleY(.78); }
+}
+
 @media (max-width: 700px) {
   .ambient-cube { bottom: 5%; left: -20px; width: 84px; height: 84px; }
   .ambient-cube span:nth-child(1) { transform: translateZ(42px); }
@@ -642,6 +732,8 @@ body {
   .ambient-cube span:nth-child(5) { transform: rotateX(90deg) translateZ(42px); }
   .ambient-cube span:nth-child(6) { transform: rotateX(-90deg) translateZ(42px); }
   .ambient-chart { top: 26%; right: -25%; width: 112%; height: 38%; opacity: .19; }
+  .ambient-bars { right: -5%; bottom: 6%; width: 150px; height: 115px; opacity: .27; }
+  .ambient-orb--secondary { left: 14%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -650,7 +742,10 @@ body {
   .ambient-chart,
   .ambient-chart-line,
   .ambient-chart-secondary,
-  .ambient-chart-indicator {
+  .ambient-chart-indicator,
+  .ambient-orb::before,
+  .ambient-orb::after,
+  .ambient-bars span {
     animation: none;
   }
 }
