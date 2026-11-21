@@ -10,6 +10,7 @@
           cache: "no-store",
           headers: { Accept: "application/json" }
         });
+        if (response.status === 404) return null;
         if (!response.ok) throw new Error("Could not load authentication configuration.");
 
         const config = await response.json();

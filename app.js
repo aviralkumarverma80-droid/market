@@ -889,7 +889,10 @@ async function startDashboard() {
   const authClient = await window.marketfieldAuth.getClient();
 
   if (!authClient) {
-    window.location.replace("/login.html?setup=required");
+    loadingMessage.hidden = true;
+    dashboard.hidden = false;
+    elements["signout-button"].hidden = true;
+    initializePage();
     return;
   }
 
