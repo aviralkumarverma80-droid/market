@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b121a">
+    <meta name="description" content="A real-time-ready stock analytics dashboard with interactive charts, moving averages, and volatility tracking.">
+    <title>Marketfield — Stock analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;450;500;550;600;650;700;750&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="auth.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="auth-loading" id="auth-loading" role="status">Checking your Marketfield session…</div>
+    <div class="app" id="dashboard" hidden>
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Marketfield home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>marketfield<span class="brand-period">.</span></span>
+        </a>
+        <div class="topbar-center"><span class="market-pulse"></span> MARKET OVERVIEW <span class="topbar-divider">/</span> US EQUITIES</div>
+        <div class="topbar-actions">
+          <button class="command-trigger" id="command-open" type="button" aria-label="Search stocks and actions" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+            <span class="command-trigger-icon" aria-hidden="true">⌕</span><span class="command-trigger-label">Search stocks</span><kbd id="command-shortcut">Ctrl K</kbd>
+          </button>
+          <span class="market-hours" title="Estimated U.S. session based on weekday hours; exchange holidays are not included."><span class="hours-dot"></span> <span id="market-status">Checking U.S. session</span></span>
+          <button class="avatar" id="signout-button" type="button" aria-label="Sign out" title="Sign out">↪</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="intro">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> YOUR MARKET, IN FOCUS</div>
+            <h1>Markets in focus<span class="title-dot">.</span></h1>
+            <p class="intro-subtitle">Track price action, momentum, and risk across your watchlist.</p>
+          </div>
+          <div class="date-block"><span class="date-icon" aria-hidden="true">◷</span><span id="today-date">Market overview</span></div>
+        </section>
+
+        <section class="ticker-strip" aria-label="Major market indexes">
+          <article class="ticker-item"><span class="ticker-label">S&amp;P 500</span><span class="ticker-value">5,842.47</span><span class="ticker-change positive">↗ 0.84%</span><svg class="ticker-spark" viewBox="0 0 76 25" aria-hidden="true"><path d="M1 19 10 16 19 18 28 11 37 15 46 8 55 12 64 5 75 4"/></svg></article>
+          <span class="ticker-separator"></span>
+          <article class="ticker-item"><span class="ticker-label">NASDAQ</span><span class="ticker-value">18,472.57</span><span class="ticker-change positive">↗ 1.16%</span><svg class="ticker-spark" viewBox="0 0 76 25" aria-hidden="true"><path d="M1 20 10 18 19 12 28 16 37 10 46 12 55 6 64 8 75 3"/></svg></article>
+          <span class="ticker-separator"></span>
+          <article class="ticker-item"><span class="ticker-label">DOW JONES</span><span class="ticker-value">42,516.09</span><span class="ticker-change negative">↘ 0.23%</span><svg class="ticker-spark ticker-spark-down" viewBox="0 0 76 25" aria-hidden="true"><path d="M1 6 10 7 19 4 28 12 37 8 46 15 55 11 64 19 75 18"/></svg></article>
+          <span class="ticker-separator"></span>
+          <article class="ticker-item ticker-item-extra"><span class="ticker-label">RUSSELL 2000</span><span class="ticker-value">2,098.12</span><span class="ticker-change positive">↗ 0.37%</span><svg class="ticker-spark" viewBox="0 0 76 25" aria-hidden="true"><path d="M1 17 10 14 19 18 28 12 37 14 46 8 55 11 64 5 75 7"/></svg></article>
+          <span class="snapshot-note">ILLUSTRATIVE SNAPSHOT <span class="info-dot" title="These index figures are illustrative sample data, not live quotes.">i</span></span>
+        </section>
+
+        <section class="workspace" aria-label="Stock analytics workspace">
+          <section class="panel chart-panel" aria-label="Price chart">
+            <div class="chart-heading">
+              <div class="selected-company">
+                <span class="company-logo" id="company-logo">A</span>
+                <div><div class="company-title"><h2 id="company-name">Apple Inc.</h2><span class="company-exchange">NASDAQ</span></div><div class="company-subtitle" id="company-caption">AAPL <span class="caption-dot">·</span> Technology</div></div>
+                <button class="star-button" id="favorite-button" type="button" aria-label="Add Apple Inc. to favorites" title="Add to favorites">☆</button>
+              </div>
+              <div class="company-price-block"><div class="main-price" id="main-price">$231.78</div><div class="price-change" id="price-change"><span>+$2.46 (1.07%)</span><span class="change-period">past month</span></div></div>
+            </div>
+            <div class="chart-toolbar">
+              <div class="range-tabs" role="group" aria-label="Chart time range">
+                <button class="range-button" type="button" data-range="1D">1D</button>
+                <button class="range-button" type="button" data-range="1W">1W</button>
+                <button class="range-button active" type="button" data-range="1M">1M</button>
+                <button class="range-button" type="button" data-range="3M">3M</button>
+                <button class="range-button" type="button" data-range="6M">6M</button>
+                <button class="range-button" type="button" data-range="1Y">1Y</button>
+              </div>
+              <div class="chart-controls"><span class="chart-period-label" id="chart-period-label">1 MONTH</span><span class="control-divider"></span><button class="icon-button refresh-icon" id="refresh-button" type="button" aria-label="Refresh market prices" title="Refresh market prices">↻</button><button class="icon-button" id="chart-mode-button" type="button" aria-label="Switch chart type" title="Switch chart type">⌁</button><button class="icon-button export-button" id="export-button" type="button" aria-label="Download chart data as CSV" title="Download chart data">↓</button></div>
+            </div>
+            <div class="chart-legend"><span class="legend-price"><span class="legend-swatch"></span> PRICE</span><button class="legend-toggle sma20-toggle enabled" type="button" data-indicator="sma20" aria-pressed="true"><span class="legend-swatch"></span> SMA 20</button><button class="legend-toggle sma50-toggle enabled" type="button" data-indicator="sma50" aria-pressed="true"><span class="legend-swatch"></span> SMA 50</button><span class="chart-source" id="chart-source">SAMPLE DATA</span></div>
+            <div class="chart-wrap" id="chart-wrap">
+              <svg id="price-chart" class="price-chart" viewBox="0 0 760 265" preserveAspectRatio="none" role="img" aria-label="Apple stock price chart"></svg>
+              <div id="chart-tooltip" class="chart-tooltip" role="status" hidden></div>
+            </div>
+            <div class="chart-footnote"><span><span class="footnote-dot"></span> PRICES SHOWN IN USD</span><span id="chart-updated">Sample market history · not live</span></div>
+          </section>
+
+          <aside class="right-column">
+            <section class="panel indicator-panel">
+              <div class="panel-heading"><div><div class="eyebrow small-eyebrow">MOMENTUM CHECK</div><h3>At a glance</h3></div><span class="sparkle" aria-hidden="true">✳</span></div>
+              <div class="sentiment-row"><span class="sentiment-label" id="sentiment-label">Positive momentum</span><span class="sentiment-badge" id="sentiment-badge">BULLISH</span></div>
+              <div class="sentiment-track"><span class="sentiment-track-mark" id="sentiment-track-mark"></span></div>
+              <div class="sentiment-scale"><span>BEARISH</span><span>NEUTRAL</span><span>BULLISH</span></div>
+              <div class="metric-divider"></div>
+                <div class="metric-list">
+                  <div class="metric-row"><span class="metric-name"><span class="metric-indicator-dot dot-green"></span> <span id="sma20-label">20-day average</span> <span class="metric-info" title="Simple moving average of the last 20 available price observations.">i</span></span><span class="metric-value" id="sma20-value">$228.64 <span class="mini-tag above-tag">ABOVE</span></span></div>
+                  <div class="metric-row"><span class="metric-name"><span class="metric-indicator-dot dot-amber"></span> <span id="sma50-label">50-day average</span> <span class="metric-info" title="Simple moving average of the last 50 available price observations.">i</span></span><span class="metric-value" id="sma50-value">$224.91 <span class="mini-tag above-tag">ABOVE</span></span></div>
+                <div class="metric-row"><span class="metric-name"><span class="metric-indicator-dot dot-blue"></span> Annualized volatility <span class="metric-info" id="volatility-info" title="20-observation standard deviation of price returns, annualized by observation interval.">i</span></span><span class="metric-value" id="volatility-value">24.8% <span class="vol-chip">MODERATE</span></span></div>
+                <div class="metric-row"><span class="metric-name"><span class="metric-indicator-dot dot-violet"></span> <span id="return-label">20-day return</span></span><span class="metric-value positive" id="return-value">+3.46%</span></div>
+              </div>
+              <div class="indicator-note"><span class="note-icon">✳</span> Based on historical price movement — not a prediction.</div>
+            </section>
+            <section class="panel data-panel">
+              <div class="data-card-head"><span class="data-icon">◈</span><div><h3>Connect live data</h3><p>Link your Twelve Data API key</p></div></div>
+              <details class="connect-details" id="connect-details">
+                <summary id="connect-summary">Set up connection <span aria-hidden="true">↗</span></summary>
+                <div class="connect-body">
+                  <p>Your key stays in this browser tab and is sent only to Twelve Data. Quotes refresh every minute; delays depend on your API plan. <a href="https://twelvedata.com/pricing" target="_blank" rel="noopener noreferrer">Get a free API key ↗</a></p>
+                  <form id="api-key-form">
+                    <label class="sr-only" for="api-key-input">Twelve Data API key</label>
+                    <input id="api-key-input" name="apiKey" type="password" placeholder="Paste your API key" autocomplete="off" spellcheck="false" required>
+                    <button class="connect-button" id="connect-button" type="submit">Connect</button>
+                  </form>
+                  <button class="disconnect-button" id="disconnect-button" type="button" hidden>Disconnect &amp; clear key</button>
+                  <div class="connect-status" id="connect-status" aria-live="polite"></div>
+                </div>
+              </details>
+              <div class="sample-disclosure"><span class="info-dot">i</span><span>Without an API key, sample prices are shown. Sample data is not live or for investment decisions.</span></div>
+            </section>
+          </aside>
+        </section>
+
+        <section class="lower-grid">
+          <section class="panel watchlist-panel">
+            <div class="section-title-row"><div><div class="eyebrow small-eyebrow">YOUR SHORTLIST</div><h3>On the radar <span class="watchlist-count" id="watchlist-count">08</span></h3></div>            <label class="search-wrap"><span aria-hidden="true">⌕</span><span class="sr-only">Search symbols</span><input id="search-input" type="search" placeholder="Find a company" autocomplete="off" spellcheck="false"></label></div>
+            <div class="table-wrap"><table class="stocks-table"><thead><tr><th>COMPANY</th><th>PRICE</th><th>DAY CHANGE</th><th class="table-chart-heading">TREND <span>1M</span></th><th class="table-action-heading"><span class="sr-only">Select</span></th></tr></thead><tbody id="watchlist-body"></tbody></table><div class="empty-state" id="empty-state" hidden>No matches. Try a ticker like “AAPL”.</div></div>
+            <div class="watchlist-footnote"><span><span class="footnote-dot"></span> ILLUSTRATIVE PRICES · MARKET DATA REQUIRES API CONNECTION</span><span class="sort-note">Select a row to analyze ↗</span></div>
+          </section>
+          <section class="panel volatility-panel">
+            <div class="volatility-header"><div><div class="eyebrow small-eyebrow">RISK PERSPECTIVE</div><h3>Volatility trend</h3></div><span class="volatility-value-pill" id="volatility-chip">24.8%</span></div>
+            <p class="volatility-description">How much <span id="volatility-ticker">AAPL</span> has moved, <span id="volatility-description-label">day to day.</span></p>
+            <div class="volatility-chart-wrap"><svg id="volatility-chart" viewBox="0 0 290 94" preserveAspectRatio="none" role="img" aria-label="Annualized historical volatility over time"></svg></div>
+            <div class="volatility-axis"><span id="volatility-period-start">20 SESSIONS AGO</span><span>NOW</span></div>
+            <div class="volatility-footer"><span><span class="vol-key vol-low"></span> QUIET &lt; 20%</span><span><span class="vol-key vol-mid"></span> MODERATE</span><span><span class="vol-key vol-high"></span> ELEVATED &gt; 40%</span></div>
+          </section>
+        </section>
+        <footer class="footer"><span>Built for better questions, not predictions.</span><span>Sample data is illustrative only · API data provided by <a href="https://twelvedata.com" target="_blank" rel="noopener noreferrer">Twelve Data</a> · Not investment advice</span></footer>
+      </main>
+      <dialog class="command-dialog" id="command-dialog" aria-label="Quick search and actions">
+        <div class="command-shell">
+          <div class="command-search">
+            <span class="command-search-icon" aria-hidden="true">⌕</span>
+            <label class="sr-only" for="command-input">Search stocks and actions</label>
+            <input id="command-input" type="search" placeholder="Search a ticker, company, or action..." autocomplete="off" spellcheck="false" aria-controls="command-results" aria-expanded="true">
+            <button class="command-close" id="command-close" type="button" aria-label="Close quick search">ESC</button>
+          </div>
+          <div class="command-results" id="command-results" role="listbox" aria-label="Stocks and actions"></div>
+          <div class="command-empty" id="command-empty" hidden>No matches. Try a ticker like “NVDA”.</div>
+          <div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span><span><kbd>↵</kbd> Select</span><span><kbd>esc</kbd> Close</span></div>
+        </div>
+      </dialog>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>

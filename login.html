@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b121a">
+    <meta name="description" content="Sign in to your Marketfield stock analytics workspace.">
+    <title>Sign in — Marketfield</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;450;500;550;600;650;700;750&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="auth.js" defer></script>
+    <script src="login.js" defer></script>
+  </head>
+  <body class="auth-page">
+    <main class="auth-layout">
+      <section class="auth-story" aria-labelledby="auth-story-title">
+        <a class="brand auth-brand" href="/" aria-label="Marketfield home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>marketfield<span class="brand-period">.</span></span>
+        </a>
+        <div class="auth-story-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> YOUR MARKET, IN FOCUS</div>
+          <h1 id="auth-story-title">Make sense of every move<span class="title-dot">.</span></h1>
+          <p>One calm workspace for price action, momentum, volatility, and the stocks on your radar.</p>
+        </div>
+        <div class="auth-market-card" aria-hidden="true">
+          <div class="auth-market-card-heading"><span>MARKET ANALYTICS</span><span>01 — 04</span></div>
+          <div class="auth-market-line">
+            <span class="auth-market-line-base"></span>
+            <svg viewBox="0 0 430 100" preserveAspectRatio="none">
+              <path d="M0 74 34 68 64 77 94 52 124 59 154 42 184 51 214 35 244 47 274 30 304 42 334 22 364 31 394 13 430 18"></path>
+            </svg>
+          </div>
+          <div class="auth-market-card-footer"><span>PRICE · MOMENTUM · RISK</span><span class="auth-market-ready"><i></i> WORKSPACE ACCESS</span></div>
+        </div>
+        <p class="auth-disclaimer">Illustrative market data is not live or investment advice.</p>
+      </section>
+
+      <section class="auth-card" aria-labelledby="auth-title">
+        <div class="auth-card-heading">
+          <div class="eyebrow small-eyebrow">ACCOUNT ACCESS</div>
+          <h2 id="auth-title">Welcome back</h2>
+          <p id="auth-description">Sign in to continue to your Marketfield workspace.</p>
+        </div>
+        <div class="auth-tabs" id="auth-tabs" role="group" aria-label="Account options">
+          <button class="active" id="signin-tab" type="button" aria-pressed="true">Sign in</button>
+          <button id="signup-tab" type="button" aria-pressed="false">Create account</button>
+        </div>
+        <div class="auth-message" id="auth-message" role="status" aria-live="polite" hidden></div>
+        <form class="auth-form" id="auth-form">
+          <label class="auth-field" id="email-field" for="auth-email">
+            <span>Email address</span>
+            <input id="auth-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          </label>
+          <label class="auth-field" id="password-field" for="auth-password">
+            <span id="password-label">Password</span>
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+          </label>
+          <label class="auth-field" id="confirm-password-field" for="auth-confirm-password" hidden>
+            <span>Confirm password</span>
+            <input id="auth-confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Repeat your password">
+          </label>
+          <button class="auth-submit" id="auth-submit" type="submit">Sign in</button>
+          <div class="auth-form-links">
+            <button class="auth-text-button" id="forgot-password" type="button">Forgot password?</button>
+            <button class="auth-text-button" id="back-to-signin" type="button" hidden>Back to sign in</button>
+          </div>
+        </form>
+        <div class="auth-card-footer"><span class="auth-lock" aria-hidden="true">◈</span> Secure authentication powered by Supabase</div>
+      </section>
+    </main>
+  </body>
+</html>
