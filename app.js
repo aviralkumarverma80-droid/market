@@ -900,7 +900,7 @@ async function startDashboard() {
   if (error) throw error;
   if (!data.session) {
     clearMarketDataSession();
-    window.location.replace("/login.html");
+    window.location.replace("./login.html");
     return;
   }
 
@@ -912,7 +912,7 @@ async function startDashboard() {
     try {
       const { error: signOutError } = await authClient.auth.signOut();
       if (signOutError) throw signOutError;
-      window.location.replace("/login.html");
+      window.location.replace("./login.html");
     } catch {
       elements["signout-button"].disabled = false;
       showToast("Could not sign out. Please try again.");
@@ -921,7 +921,7 @@ async function startDashboard() {
   authClient.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_OUT" || !session) {
       clearMarketDataSession();
-      window.location.replace("/login.html");
+      window.location.replace("./login.html");
     }
   });
   initializePage();

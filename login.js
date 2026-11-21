@@ -121,7 +121,7 @@ async function initializeLogin() {
     return;
   }
 
-  if (data.session) window.location.replace("/");
+  if (data.session) window.location.replace("./");
 }
 
 authElements.signInTab.addEventListener("click", () => setMode("signin"));
@@ -146,7 +146,7 @@ authElements.form.addEventListener("submit", async event => {
     if (mode === "signin") {
       const { error } = await authClient.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      window.location.replace("/");
+      window.location.replace("./");
       return;
     }
 
@@ -154,11 +154,11 @@ authElements.form.addEventListener("submit", async event => {
       const { data, error } = await authClient.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/login.html` }
+        options: { emailRedirectTo: new URL("./login.html", window.location.href).href }
       });
       if (error) throw error;
       if (data.session) {
-        window.location.replace("/");
+        window.location.replace("./");
         return;
       }
       setMode("signin");
@@ -168,7 +168,7 @@ authElements.form.addEventListener("submit", async event => {
 
     if (mode === "reset") {
       const { error } = await authClient.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/login.html?mode=recovery`
+        redirectTo: new URL("./login.html?mode=recovery", window.location.href).href
       });
       if (error) throw error;
       showMessage("If an account exists for that email, a password reset link is on its way.");
@@ -177,7 +177,7 @@ authElements.form.addEventListener("submit", async event => {
 
     const { error } = await authClient.auth.updateUser({ password });
     if (error) throw error;
-    window.location.replace("/");
+    window.location.replace("./");
   } catch {
     const errorMessages = {
       signin: "Could not sign in. Check your email and password, then try again.",
