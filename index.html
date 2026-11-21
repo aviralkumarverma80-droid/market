@@ -9,13 +9,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;450;500;550;600;650;700;750&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20261122-neon">
+    <link rel="stylesheet" href="styles.css?v=20261122-3d">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js?v=20261122" defer></script>
     <script src="auth.js?v=20261122-supabase" defer></script>
     <script src="app.js?v=20261122-supabase" defer></script>
   </head>
   <body>
+    <div class="ambient-background" aria-hidden="true">
+      <div class="ambient-orb"></div>
+      <div class="ambient-cube"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <svg class="ambient-chart" viewBox="0 0 1200 480" preserveAspectRatio="none">
+        <path class="ambient-chart-grid" d="M0 80H1200M0 160H1200M0 240H1200M0 320H1200M0 400H1200M150 0V480M350 0V480M550 0V480M750 0V480M950 0V480M1150 0V480"></path>
+        <path class="ambient-chart-line" d="M0 345 92 322 158 340 226 277 294 290 360 224 423 250 494 185 562 210 634 128 695 168 765 142 828 186 902 94 972 124 1043 68 1110 91 1200 30"></path>
+        <path class="ambient-chart-secondary" d="M0 420 110 398 192 414 284 363 368 378 448 324 526 346 612 300 700 326 782 262 874 287 954 240 1032 258 1116 207 1200 224"></path>
+        <circle class="ambient-chart-indicator" cx="1043" cy="68" r="7"></circle>
+        <circle class="ambient-chart-indicator ambient-chart-indicator--pink" cx="782" cy="262" r="5"></circle>
+      </svg>
+    </div>
     <div class="auth-loading" id="auth-loading" role="status">Checking your Marketfield session…</div>
     <div class="app" id="dashboard" hidden>
       <header class="topbar">
