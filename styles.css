@@ -265,6 +265,8 @@ h1 { margin: 11px 0 4px; color: var(--text-strong); font-size: 29px; font-weight
 
 .footer { display: flex; justify-content: space-between; gap: 12px; padding: 15px 2px 8px; color: var(--dim); font-size: 9px; }
 .footer a { color: var(--muted); text-decoration: none; }
+.creator-credit { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); white-space: nowrap; }
+.creator-label { color: var(--green); font: 8px var(--mono); letter-spacing: .9px; }
 .toast { position: fixed; right: 22px; bottom: 20px; z-index: 5; max-width: min(390px, calc(100vw - 32px)); padding: 11px 15px; transform: translateY(10px); border: 1px solid #3d4735; border-radius: 5px; background: #20251c; box-shadow: 0 7px 30px #0007; color: var(--text); font-size: 11px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
 .toast.visible { transform: translateY(0); opacity: 1; }
 .command-dialog { width: min(570px, calc(100vw - 30px)); max-width: none; max-height: min(600px, calc(100vh - 40px)); padding: 0; overflow: hidden; border: 1px solid #363c31; border-radius: 9px; background: #191c17; color: var(--text); box-shadow: 0 26px 90px #0009, 0 0 0 1px #0005; }
