@@ -6,7 +6,7 @@
   async function getClient() {
     if (!clientPromise) {
       clientPromise = (async () => {
-        const response = await fetch("/auth-config", {
+        const response = await fetch("./auth-config", {
           cache: "no-store",
           headers: { Accept: "application/json" }
         });
