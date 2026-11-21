@@ -10,7 +10,7 @@ With Node.js installed, serve the folder over HTTP:
 node server.js
 ```
 
-Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. No npm install or other dependencies are required.
+Then open https://aviralkumarverma80-droid.github.io/market/login.html in your browser. No npm install or other dependencies are required.
 
 Press **Ctrl+K** (or **Command+K** on macOS) to open the accessible quick-search palette. Search company names and symbols, move through results with the arrow keys, and press Enter to select a stock or run an action. Press Escape to return to the dashboard.
 
