@@ -886,44 +886,9 @@ function clearMarketDataSession() {
 async function startDashboard() {
   const dashboard = document.getElementById("dashboard");
   const loadingMessage = document.getElementById("auth-loading");
-  const authClient = await window.marketfieldAuth.getClient();
-
-  if (!authClient) {
-    loadingMessage.hidden = true;
-    dashboard.hidden = false;
-    elements["signout-button"].hidden = true;
-    initializePage();
-    return;
-  }
-
-  const { data, error } = await authClient.auth.getSession();
-  if (error) throw error;
-  if (!data.session) {
-    clearMarketDataSession();
-    window.location.replace("./login.html");
-    return;
-  }
-
   dashboard.hidden = false;
   loadingMessage.hidden = true;
-  elements["signout-button"].textContent = (data.session.user.email || "M").slice(0, 1).toUpperCase();
-  elements["signout-button"].addEventListener("click", async () => {
-    elements["signout-button"].disabled = true;
-    try {
-      const { error: signOutError } = await authClient.auth.signOut();
-      if (signOutError) throw signOutError;
-      window.location.replace("./login.html");
-    } catch {
-      elements["signout-button"].disabled = false;
-      showToast("Could not sign out. Please try again.");
-    }
-  });
-  authClient.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_OUT" || !session) {
-      clearMarketDataSession();
-      window.location.replace("./login.html");
-    }
-  });
+  elements["signout-button"].hidden = true;
   initializePage();
 }
 
